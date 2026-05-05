@@ -24,6 +24,11 @@
     body {
       background: radial-gradient(circle at top, #111, #000);
       color: white;
+      overflow-x: hidden;
+    }
+
+    body.lock {
+      overflow: hidden;
     }
 
     /* NAVBAR */
@@ -49,6 +54,7 @@
 
     .logo img {
       height: 35px;
+      border-radius: 6px;
     }
 
     .logo span {
@@ -56,16 +62,15 @@
       font-weight: 600;
     }
 
-    /* RIGHT SIDE NAV */
     .nav-right {
       display: flex;
       align-items: center;
       gap: 15px;
     }
 
-    /* PLAY NOW BUTTON */
+    /* PLAY NOW */
     .play-btn {
-      background: var(--gold);
+      background: linear-gradient(135deg, #FFD700, #ffcc00);
       color: black;
       padding: 10px 18px;
       border-radius: 999px;
@@ -76,8 +81,8 @@
     }
 
     .play-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 20px var(--gold);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 0 25px rgba(255,215,0,0.6);
     }
 
     /* HAMBURGER */
@@ -87,21 +92,19 @@
       transition: 0.3s;
     }
 
-    .menu-btn:hover {
+    .menu-btn.active {
       color: var(--gold);
     }
 
-    /* FULLSCREEN DROPDOWN */
+    /* DROPDOWN */
     .dropdown {
       position: fixed;
       top: -100%;
       left: 0;
       width: 100%;
       height: 100vh;
-
       background: rgba(0,0,0,0.25);
       backdrop-filter: blur(25px);
-
       padding: 100px 30px 30px;
       transition: 0.5s ease;
       z-index: 999;
@@ -111,7 +114,6 @@
       top: 0;
     }
 
-    /* MENU ITEM */
     .dropdown a {
       display: block;
       margin: 18px 0;
@@ -170,7 +172,143 @@
       box-shadow: 0 0 25px var(--gold);
       transform: translateY(-2px);
     }
+    .divider{
+      background-color: #181818;
+      padding: 80px;
+    }
+    
+    .gray-section {
+  background: #000;
+  padding: 60px 20px;
+}
 
+.gray-container {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  gap: 20px;
+}
+
+.gray-box {
+  flex: 1;
+  background:#181818;
+  border: 1px solid rgba(255,215,0,0.08);
+  backdrop-filter: blur(8px);
+  padding: 40px;
+  border-radius: 14px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.gray-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(255,215,0,0.15);
+  border-color: rgba(255,215,0,0.3);
+}
+
+.gray-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255,215,0,0.1), transparent);
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.gray-box:hover::before {
+  opacity: 1;
+}
+
+/* RESPONSIVE */
+@media(max-width: 768px){
+  .gray-container {
+    flex-direction: column;
+  }
+}
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.spec-item {
+  text-align: center;
+}
+
+.spec-item img {
+  width: 40px;
+  margin-bottom: 10px;
+}
+
+.spec-item h4 {
+  font-size: 14px;
+  color: var(--gold);
+  margin-bottom: 5px;
+}
+
+.spec-item p {
+  font-size: 12px;
+  color: #aaa;
+}
+.spec-item:hover {
+  transform: translateY(-3px);
+  transition: 0.3s;
+}
+
+.info-box {
+  display: flex;
+  gap: 20px;
+  background: #0d0d0d;
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 18px;
+  padding: 25px;
+  align-items: flex-start;
+  margin-top: 35px;
+}
+
+/* ICON */
+.info-icon {
+  min-width: 60px;
+  height: 60px;
+  background: rgba(255,215,0,0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFD700;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* CONTENT */
+.info-content h3 {
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+/* LIST */
+.info-content ul {
+  list-style: none;
+}
+
+.info-content li {
+  margin-bottom: 12px;
+  color: #bbb;
+  position: relative;
+  padding-left: 18px;
+}
+
+/* BULLET CUSTOM */
+.info-content li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #FFD700;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 8px;
+}
   </style>
 
 </head>
@@ -185,36 +323,123 @@
       <span>High Era RP</span>
     </div>
 
+
 <div class="nav-right">
   <a href="#" class="play-btn">Play Now</a>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</div>
 </div>
+
 
   </nav>
 
-  <!-- FULLSCREEN MENU -->
+  <!-- DROPDOWN -->
 
   <div class="dropdown" id="dropdown">
-    <a href="#">Beranda</a>
-    <a href="#">Pekerjaan</a>
-    <a href="#">Peraturan</a>
-    <a href="#">Donasi</a>
-    <a href="#">Merch</a>
+    <a href="#" onclick="closeMenu()">Beranda</a>
+    <a href="#" onclick="closeMenu()">Pekerjaan</a>
+    <a href="#" onclick="closeMenu()">Peraturan</a>
+    <a href="#" onclick="closeMenu()">Donasi</a>
   </div>
 
   <!-- HERO -->
 
   <section class="hero">
     <h1>Welcome to <span>High Era Roleplay</span></h1>
-    <p>Server FiveM yang masih fresh dengan fitur bagus & komunitas aktif</p>
+    <p>Server GTA V Roleplay dengan pengalaman realistis & komunitas aktif</p>
+
 
 <a href="https://discord.gg/45V5WmMxV2" class="discord-btn">Join Discord</a>
-
   </section>
+  <section class="divider"></section>
+  <section class="gray-section">
+  <div class="gray-container">
+    
+  <div class="gray-box">
+
+  <div class="spec-grid">
+    <div class="spec-item">
+      <img src="cpu.png">
+      <h4>CPU</h4>
+      <p>Processor high performance</p>
+    </div>
+    <div class="spec-item">
+      <img src="gpu.png">
+      <h4>GPU</h4>
+      <p>Graphics powerful rendering</p>
+    </div>
+    <div class="spec-item">
+      <img src="ram.png">
+      <h4>Memory</h4>
+      <p>Fast and responsive system</p>
+    </div>
+    <div class="spec-item">
+      <img src="storage.png">
+      <h4>Storage</h4>
+      <p>SSD ultra fast loading</p>
+    </div>
+  </div>
+</div>
+    <div class="gray-box">
+
+  <div class="spec-grid">
+    <div class="spec-item">
+      <img src="cpu.png">
+      <h4>CPU</h4>
+      <p>Processor high performance</p>
+    </div>
+    <div class="spec-item">
+      <img src="gpu.png">
+      <h4>GPU</h4>
+      <p>Graphics powerful rendering</p>
+    </div>
+    <div class="spec-item">
+      <img src="ram.png">
+      <h4>Memory</h4>
+      <p>Fast and responsive system</p>
+    </div>
+    <div class="spec-item">
+      <img src="storage.png">
+      <h4>Storage</h4>
+      <p>SSD ultra fast loading</p>
+    </div>
+  </div>
+</div>
+  </div>
+  <div class="info-box">
+  
+  <div class="info-icon">
+    i
+  </div>
+
+  <div class="info-content">
+    <h3>Rekomendasi Tambahan</h3>
+
+    <ul>
+      <li>Koneksi internet stabil minimal 10 Mbps</li>
+      <li>Windows 10 64-bit (versi 1909 atau lebih baru)</li>
+      <li>DirectX 11 dan Visual C++ Redistributable terbaru</li>
+    </ul>
+  </div>
+
+</div>
+</section>
 
   <script>
+    const dropdown = document.getElementById("dropdown");
+    const menuBtn = document.getElementById("menuBtn");
+
     function toggleMenu() {
-      document.getElementById("dropdown").classList.toggle("active");
+      dropdown.classList.toggle("active");
+      menuBtn.classList.toggle("active");
+      menuBtn.innerHTML = dropdown.classList.contains("active") ? "✖" : "☰";
+      document.body.classList.toggle("lock");
+    }
+
+    function closeMenu() {
+      dropdown.classList.remove("active");
+      menuBtn.classList.remove("active");
+      menuBtn.innerHTML = "☰";
+      document.body.classList.remove("lock");
     }
   </script>
 
